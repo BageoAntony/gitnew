@@ -37,19 +37,9 @@ class QuestioinsView(ModelViewSet):
         question = Questions.objects.get(id=id)
         user = request.user
 
-        serializer = AnswerSerializer(data=request.data, context={"question":question,"user":user})
+        serializer = AnswerSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(data=serializer.data)
         else:
             return Response(data=serializer.errors)
-
-    @action(methods=["GET"], detail=True)
-    def list_answers(self, request, *args, **kwargs):
-        id = kwargs.get("pk")
-        question = Questions.objects.get(id=id)
-        answers = question.answers_set.all()
-
-        serializer = AnswerSerializer(answers, many=True)
-        return Response(data=serializer.data)
-        

@@ -40,8 +40,3 @@ class AnswerSerializer(serializers.ModelSerializer):
             "user",
             "created_date"
         ]
-
-    def create(self, validated_data):
-        question = self.context.get('question')
-        user = self.context.get('user')
-        return Answers.objects.create(**validated_data, question=question, user=user)
