@@ -19,7 +19,8 @@ from core_app import views
 from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register("users", views.UserView, basename="users")
-router.register("questions", views.QuestioinsView, basename="questions")
+router.register("questions", views.QuestionsView, basename="questions")
+router.register("answers",views.AnswerView,basename="answers")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

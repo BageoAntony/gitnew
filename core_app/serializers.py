@@ -32,6 +32,7 @@ class AnswerSerializer(serializers.ModelSerializer):
     question = serializers.CharField(read_only=True)
     user = serializers.CharField(read_only=True)
     created_date = serializers.CharField(read_only=True)
+    votecount=serializers.CharField(read_only=True)
     class Meta:
         model = Answers
         fields = [

@@ -18,6 +18,13 @@ class Questions(models.Model):
     image = models.ImageField(upload_to="images", null=True)
     date_created = models.DateField(auto_now_add = True)
 
+    @property
+    def question_answers(self):
+        qs=self.answers_set.all().annotate(u_count=Count('upvote')).order_by('-u_count')
+
+
+        return qs
+
     def __str__(self):
         return self.title
 
@@ -28,17 +35,14 @@ class Answers(models.Model):
     upvote = models.ManyToManyField(User, related_name="upvote")
     created_date = models.DateField(auto_now_add=True)
 
+
+
     def __str__(self):
         return self.answer
 
-class Likes(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    Answers = models.ForeignKey(Answers, on_delete=models.CASCADE)
-
-class Comments(models.Model):
-    questions = models.ForeignKey(Questions, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.CharField(max_length=200)
+    @property
+    def votecount(self):
+        return self.upvote.all().count()
 
 
 

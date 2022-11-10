@@ -14,7 +14,7 @@ class UserView(ModelViewSet):
     queryset = User.objects.all()
 
 
-class QuestioinsView(ModelViewSet):
+class QuestionsView(ModelViewSet):
     serializer_class = QuestionsSerializer
     queryset = Questions.objects.all()
     authentication_classes = [authentication.BasicAuthentication]
@@ -43,3 +43,23 @@ class QuestioinsView(ModelViewSet):
             return Response(data=serializer.data)
         else:
             return Response(data=serializer.errors)
+
+    @action(methods=["GET"], detail=True)
+    def list_answers(self,request,*args,**kwargs):
+        question=self.get_objects()
+        answer=question.answers_set.all()
+
+        serializer=AnswerSerializer(answer,many=True)
+        return Response(data=serializer.data)
+
+
+class AnswerView(ModelViewSet):
+    serializer_class=AnswerSerializer
+    queryset=Answers.objects.all()
+
+    @action(methods=["GET"], detail=True)
+    def upvote(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        answer=Answers.objects.get(id=id)
+        answer.upvote.add(request.user)
+        return Response('upvoted')
